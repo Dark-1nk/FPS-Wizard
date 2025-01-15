@@ -4,45 +4,32 @@ using UnityEngine;
 
 public class DoorManager : MonoBehaviour
 {
+    [System.Serializable]
     public class DoorEntry
     {
-        public GameObject Door;
+        public GameObject door;
         public bool isRed;
         public bool isGreen;
         public bool isPink;
     }
 
-    public List<DoorEntry> Doors;
+    public List<DoorEntry> doors;
 
     public void OpenMe(string color)
     {
-        if (color == "Red")
+        foreach (DoorEntry entry in doors)
         {
-            foreach (DoorEntry entry in Doors)
+            if ((color == "Red" && entry.isRed) ||
+                (color == "Pink" && entry.isPink) ||
+                (color == "Green" && entry.isGreen))
             {
-                if (entry.isRed)
+                if (entry.door != null) // Ensure the door object is assigned
                 {
-                    gameObject.SetActive(false);
+                    entry.door.SetActive(false); // Disable the specific door object
                 }
-            }
-        }
-        if (color == "Pink")
-        {
-            foreach (DoorEntry entry in Doors)
-            {
-                if (entry.isPink)
+                else
                 {
-                    gameObject.SetActive(false);
-                }
-            }
-        }
-        if (color == "Green")
-        {
-            foreach (DoorEntry entry in Doors)
-            {
-                if (entry.isGreen)
-                {
-                    gameObject.SetActive(false);
+                    Debug.LogWarning($"Door is not assigned in entry for color: {color}");
                 }
             }
         }

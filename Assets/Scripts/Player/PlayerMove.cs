@@ -15,7 +15,8 @@ public class PlayerMove : MonoBehaviour
 
     public Animator vignette;
     public Animator camAnim;
-    private bool isWalking;
+    public bool isWalking;
+    public WandAnimator wand;
     public Animator heartsAnim;
 
     public bool isDead;
@@ -123,6 +124,7 @@ public class PlayerMove : MonoBehaviour
     {
         sfx.PlayOneShot("PlayerDamage");
         health -= damage;
+        wand.Hurt();
     }
 
     public void Die()

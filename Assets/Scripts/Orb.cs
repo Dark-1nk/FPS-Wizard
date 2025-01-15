@@ -16,6 +16,7 @@ public class Orb : MonoBehaviour
 
     // UI Canvas to track items
     public GameObject orbVisual; // Assign the canvas in the inspector
+    public CanvasManager canvasManager;
 
     private bool playerInRange = false; // Tracks if the player is in range
     private PlayerMove playerMove; // Reference to PlayerMove component
@@ -37,8 +38,8 @@ public class Orb : MonoBehaviour
         {
             playerMove.orbsCollected++;
             GetItemColor();
-            PickUpItem();
             OnPickUp();
+            PickUpItem();
         }
     }
 
@@ -88,32 +89,38 @@ public class Orb : MonoBehaviour
     {
         if (isRed)
         {
+            canvasManager.OpenCanvas("RedInfo", true);
             doorManager.OpenMe("Red");
         }
         if (isOrange)
         {
-
+            canvasManager.OpenCanvas("OrangeInfo", true);
         }
         if (isYellow)
         {
+            canvasManager.OpenCanvas("YellowInfo", true);
             playerMove.GetComponentInChildren<SparkBolt>().fireRate = 0.5f;
         }
         if (isGreen)
         {
+            canvasManager.OpenCanvas("GreenInfo", true);
             doorManager.OpenMe("Green");
             playerMove.health = 3;
         }
         if (isBlue)
         {
+            canvasManager.OpenCanvas("BlueInfo", true);
             playerMove.maxJumps = 2;
             playerMove.momentumDamping = 0.3f;
         }
         if (isViolet)
         {
+            canvasManager.OpenCanvas("PurpleInfo", true);
             playerMove.health = 1;
         }
         if (isPink)
         {
+            canvasManager.OpenCanvas("PinkInfo", true);
             doorManager.OpenMe("Pink");
             playerMove.GetComponentInChildren<SparkBolt>().bigDamage = 3;
             playerMove.GetComponentInChildren<SparkBolt>().smallDamage = 0.5f;

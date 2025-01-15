@@ -9,8 +9,8 @@ public class SparkBolt : MonoBehaviour
     public float fireRate = 1f;
     public float bigDamage = 2;
     public float smallDamage = 1;
-    
 
+    public WandAnimator wand;
     public AudioClips sfx;
     public LayerMask raycastLayerMask;
 
@@ -32,6 +32,7 @@ public class SparkBolt : MonoBehaviour
         if (Input.GetMouseButton(0) && Time.time > nextTimeToFire)
         {
             sfx.PlayOneShot("Spark");
+            wand.Bolt();
             Fire();
         }
     }

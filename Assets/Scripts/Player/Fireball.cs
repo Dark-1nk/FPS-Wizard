@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Fireball : MonoBehaviour
 {
@@ -8,15 +9,21 @@ public class Fireball : MonoBehaviour
     public float verticalRange = 20f;
     public float cooldown = 10f;
     public float damage = 5f;
+    public Image fireSpellVisual;
+    public WandAnimator wand;
+
+    public Color readyColor = Color.white; // Color when ready
+    public Color cooldownColor = new(1f, 1f, 1f, 0.5f); // Color when on cooldown
 
     public AudioClips sfx;
     public LayerMask raycastLayerMask;
 
-    private float nextTimeToFire;
     private BoxCollider fireballTrigger;
     public PlayerMove caster;
 
     public EnemyManager enemyManager;
+    private bool isOnCooldown = false;
+    private float cooldownTimer = 0f;
 
     void Start()
     {
@@ -28,14 +35,29 @@ public class Fireball : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (caster.hasOrange)
+        {
+            fireSpellVisual.gameObject.SetActive(true);
+        }
+
         if (!caster.hasOrange)
         {
             return;
         }
 
-        if (Input.GetMouseButtonDown(1) && Time.time > nextTimeToFire)
+        if (isOnCooldown)
+        {
+            cooldownTimer -= Time.deltaTime;
+            if (cooldownTimer <= 0f)
+            {
+                EndCooldown();
+            }
+        }
+
+        if (Input.GetMouseButtonDown(1) && !isOnCooldown)
         {
             sfx.PlayOneShot("Fireball");
+            wand.Fire();
             Fire();
         }
     }
@@ -56,7 +78,30 @@ public class Fireball : MonoBehaviour
             }
         }
 
-        nextTimeToFire = Time.time + cooldown;
+        StartCooldown();
+    }
+
+    void StartCooldown()
+    {
+        isOnCooldown = true;
+        cooldownTimer = cooldown;
+
+        // Update UI opacity to indicate cooldown
+        if (fireSpellVisual != null)
+        {
+            fireSpellVisual.color = cooldownColor;
+        }
+    }
+
+    void EndCooldown()
+    {
+        isOnCooldown = false;
+
+        // Reset UI opacity to indicate readiness
+        if (fireSpellVisual != null)
+        {
+            fireSpellVisual.color = readyColor;
+        }
     }
 
     private void OnTriggerEnter(Collider other)

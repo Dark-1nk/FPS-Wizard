@@ -12,12 +12,12 @@ public class CanvasManager : MonoBehaviour
 
     public List<CanvasEntry> canvases; // List of canvases and their names
     public GameObject defaultCanvas; // Default canvas to reset to
-    public KeyCode closeCanvasKey = KeyCode.KeypadEnter ; // Key to close canvas and reset to default
+    public KeyCode closeCanvasKey = KeyCode.E; // Key to close canvas and reset to default
     private GameObject currentCanvas; // Tracks the currently active canvas
 
     void Start()
     {
-        // Ensure all canvases are disabled initially except for the default one
+        // Disable all canvases initially except the default one
         foreach (var canvas in canvases)
         {
             if (canvas.canvasObject != null)
@@ -58,6 +58,10 @@ public class CanvasManager : MonoBehaviour
             // Pause the game if specified
             Time.timeScale = pausesGame ? 0 : 1;
         }
+        else
+        {
+            Debug.LogWarning($"Canvas with name '{canvasName}' not found in the list.");
+        }
     }
 
     public void CloseCanvas()
@@ -66,6 +70,7 @@ public class CanvasManager : MonoBehaviour
         if (currentCanvas != null)
         {
             currentCanvas.SetActive(false);
+            currentCanvas = null;
         }
 
         // Reset to the default canvas
