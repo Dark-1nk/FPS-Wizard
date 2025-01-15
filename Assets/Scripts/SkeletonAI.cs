@@ -10,6 +10,7 @@ public class SkeletonAI : MonoBehaviour
     public float searchDuration = 5f;
     public float attackCooldown = 2f;
     public bool isChasing;
+    bool soundPlayed = false;
 
     public AudioClips sfx;
     private NavMeshAgent agent;
@@ -59,18 +60,28 @@ public class SkeletonAI : MonoBehaviour
             case State.Chasing:
                 if (playerInSight || distanceToPlayer < chaseRange)
                 {
+                    if (!soundPlayed)
+                    {
+                        sfx.PlayOneShot("Skeleton");
+                        soundPlayed = true;
+                    }
+
                     isChasing = true;
                     lastSeenTime = Time.time;
                     agent.SetDestination(player.position);
 
                     if (distanceToPlayer <= attackRange)
                     {
+                        sfx.StopClip(1f);
+                        soundPlayed = false;
                         currentState = State.Attacking;
                     }
                 }
 
                 if (Time.time - lastSeenTime > searchDuration)
                     {
+                        sfx.StopClip(2f);
+                        soundPlayed = false;
                         currentState = State.Searching;
                     }
                 break;

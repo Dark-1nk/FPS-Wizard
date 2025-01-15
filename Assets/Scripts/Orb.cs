@@ -12,6 +12,8 @@ public class Orb : MonoBehaviour
     public bool isViolet;
     public bool isPink;
 
+    DoorManager doorManager;
+
     // UI Canvas to track items
     public GameObject orbVisual; // Assign the canvas in the inspector
 
@@ -24,6 +26,8 @@ public class Orb : MonoBehaviour
         {
             orbVisual.SetActive(false); // Start with the canvas inactive
         }
+
+        doorManager = FindObjectOfType<DoorManager>();
     }
 
     void Update()
@@ -31,6 +35,7 @@ public class Orb : MonoBehaviour
         // Check if player is in range and presses E
         if (playerInRange && Input.GetKeyDown(KeyCode.E))
         {
+            playerMove.orbsCollected++;
             GetItemColor();
             PickUpItem();
             OnPickUp();
@@ -83,7 +88,7 @@ public class Orb : MonoBehaviour
     {
         if (isRed)
         {
-            
+            doorManager.OpenMe("Red");
         }
         if (isOrange)
         {
@@ -95,11 +100,13 @@ public class Orb : MonoBehaviour
         }
         if (isGreen)
         {
+            doorManager.OpenMe("Green");
             playerMove.health = 3;
         }
         if (isBlue)
         {
-            playerMove.momentumDamping = 0.1f;
+            playerMove.maxJumps = 2;
+            playerMove.momentumDamping = 0.3f;
         }
         if (isViolet)
         {
@@ -107,6 +114,7 @@ public class Orb : MonoBehaviour
         }
         if (isPink)
         {
+            doorManager.OpenMe("Pink");
             playerMove.GetComponentInChildren<SparkBolt>().bigDamage = 3;
             playerMove.GetComponentInChildren<SparkBolt>().smallDamage = 0.5f;
         }

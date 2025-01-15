@@ -58,10 +58,6 @@ public class CanvasManager : MonoBehaviour
             // Pause the game if specified
             Time.timeScale = pausesGame ? 0 : 1;
         }
-        else
-        {
-            Debug.LogWarning($"Canvas '{canvasName}' not found or not assigned.");
-        }
     }
 
     public void CloseCanvas()
